@@ -66,24 +66,45 @@ class GildedRoseTest {
     // The Quality of an item is never negative
 
     @Test
-    void qualityPositive() {
-        Item[] items = new Item[] { new Item("foo", 1, 10) };
-        updateQuality(items);
-        assertEquals(9, app.items[0].quality);
-    }
-
-    @Test
-    void qualityZero() {
+    void qualityZeroNotExpired() {
         Item[] items = new Item[] { new Item("foo", 1, 0) };
         updateQuality(items);
         assertEquals(0, app.items[0].quality);
     }
 
     @Test
-    void qualityNegative() {
-        Item[] items = new Item[] { new Item("foo", 1, -10) };
+    void qualityZeroExpired() {
+        Item[] items = new Item[] { new Item("foo", -1, 0) };
         updateQuality(items);
-        assertEquals(-10, app.items[0].quality);
+        assertEquals(0, app.items[0].quality);
+    }
+
+    @Test
+    void qualityOneNotExpired() {
+        Item[] items = new Item[] { new Item("foo", 1, 1) };
+        updateQuality(items);
+        assertEquals(0, app.items[0].quality);
+    }
+
+    @Test
+    void qualityOneExpired() {
+        Item[] items = new Item[] { new Item("foo", -1, 1) };
+        updateQuality(items);
+        assertEquals(0, app.items[0].quality);
+    }
+
+    @Test
+    void qualityMinusOneNotExpired() {
+        Item[] items = new Item[] { new Item("foo", 1, -1) };
+        updateQuality(items);
+        assertEquals(-1, app.items[0].quality);
+    }
+
+    @Test
+    void qualityMinusOneExpired() {
+        Item[] items = new Item[] { new Item("foo", -1, -1) };
+        updateQuality(items);
+        assertEquals(-1, app.items[0].quality);
     }
 
     // “Aged Brie” actually increases in Quality the older it gets
