@@ -16,6 +16,19 @@ class GildedRoseTest {
     }
 
     @Test
+    void multipleItems() {
+        Item[] items = new Item[] {
+                new Item("foo", 0, 0),
+                new Item("bar", 0, 0),
+                new Item("baz", 0, 0)
+        };
+        updateQuality(items);
+        assertEquals("foo", app.items[0].name);
+        assertEquals("bar", app.items[1].name);
+        assertEquals("baz", app.items[2].name);
+    }
+
+    @Test
     void sellInDecreases() {
         Item[] items = new Item[] { new Item("foo", 1, 0) };
         updateQuality(items);
@@ -107,6 +120,13 @@ class GildedRoseTest {
         assertEquals(-1, app.items[0].quality);
     }
 
+    @Test
+    void qualityMinusOneForIncrementer() {
+        Item[] items = new Item[] { new Item("Aged Brie", 1, -1) };
+        updateQuality(items);
+        assertEquals(0, app.items[0].quality);
+    }
+
     // “Aged Brie” actually increases in Quality the older it gets
 
     @Test
@@ -165,6 +185,13 @@ class GildedRoseTest {
         Item[] items = new Item[] { new Item("Aged Brie", -1, 51 ) };
         updateQuality(items);
         assertEquals(51, app.items[0].quality);
+    }
+
+    @Test
+    void quality51ForDecrementer() {
+        Item[] items = new Item[] { new Item("foo", 1, 51 ) };
+        updateQuality(items);
+        assertEquals(50, app.items[0].quality);
     }
 
     // “Sulfuras”, being a legendary item, never has to be sold or decreases in Quality
