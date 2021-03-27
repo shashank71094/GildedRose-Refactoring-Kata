@@ -3,7 +3,6 @@ package com.gildedrose;
 import java.util.Arrays;
 
 class GildedRose {
-    
     Item[] items;
 
     public GildedRose(Item[] items) {
@@ -11,9 +10,9 @@ class GildedRose {
     }
 
     public void updateQuality() {
-
-        for (int i = 0; i < items.length; i++) {
-            items[i].updateItem();
-        }
+        Arrays.stream(items)
+                .map(item -> item.setSellInTime())
+                .map(item -> item.updateItem())
+                .forEach(item -> {});
     }
 }
