@@ -10,12 +10,22 @@ import java.util.stream.IntStream;
 
 public abstract class Strategy {
 
-    Predicate<Item> isQualityAboveZero = item -> item.quality > 0;
-    Predicate<Item> isQualityBelowFifty = item -> item.quality < 50;
-    Predicate<Item> isExpired = item -> item.sellIn <= 0;
-    Consumer<Item> nullifyQuality = item -> item.quality = 0;
-    BiConsumer<Item, Integer> incrementQuality = this::incrementQuality;
-    BiConsumer<Item, Integer> decrementQuality = this::decrementQuality;
+    public BiConsumer<Item, Integer> incrementQuality = this::incrementQuality;
+    public BiConsumer<Item, Integer> decrementQuality = this::decrementQuality;
+    public Predicate<Item> isExpired = item -> item.sellIn <= 0;
+    public Consumer<Item> nullifyQuality = item -> item.quality = 0;
+
+    public void updateItem(Item item) {
+        updateQuality(item);
+        if (!item.name.equals(ItemCatalog.SULFURAS.label)) {
+            item.sellIn--;
+        }
+    };
+
+    public abstract void updateQuality(Item item);
+
+    private Predicate<Item> isQualityAboveZero = item -> item.quality > 0;
+    private Predicate<Item> isQualityBelowFifty = item -> item.quality < 50;
 
     private void incrementQuality(Item item, int updateBy) {
         IntStream.range(0, updateBy).forEach(i -> {
@@ -32,13 +42,4 @@ public abstract class Strategy {
             }
         });
     }
-
-    public void updateItem(Item item) {
-        updateQuality(item);
-        if (!item.name.equals(ItemCatalog.SULFURAS.label)) {
-            item.sellIn--;
-        }
-    };
-
-    public abstract void updateQuality(Item item);
 }
