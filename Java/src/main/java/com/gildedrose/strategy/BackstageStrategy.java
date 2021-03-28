@@ -2,23 +2,27 @@ package com.gildedrose.strategy;
 
 import com.gildedrose.Item;
 
-public class BackstageStrategy implements strategy{
-    @Override
-    public Item setQuality(Item item) {
+import java.util.function.Predicate;
 
-        if (item.quality < 50) {
+public class BackstageStrategy extends Strategy {
+
+    Predicate<Item> isConcertTenOrLessDaysAway = item -> item.sellIn <= 10;
+    Predicate<Item> isConcertFiveOrLessDaysAway = item -> item.sellIn <= 5;
+
+    @Override
+    public void updateItem(Item item) {
+        if (isQualityBelowFifty.test(item)) {
             item.quality++;
-            if (item.sellIn < 11 && item.quality < 50) {
+            if (isConcertTenOrLessDaysAway.and(isQualityBelowFifty).test(item)) {
                 item.quality++;
             }
-            if (item.sellIn < 6 && item.quality < 50) {
+            if (isConcertFiveOrLessDaysAway.and(isQualityBelowFifty).test(item)) {
                 item.quality++;
             }
-            if(item.sellIn < 0 && item.quality < 50) {
+            if(isExpired.test(item)) {
                 item.quality = 0;
             }
         }
-
-        return item;
+        item.sellIn--;
     }
 }

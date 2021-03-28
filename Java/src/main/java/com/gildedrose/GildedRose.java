@@ -10,9 +10,6 @@ class GildedRose {
     }
 
     public void updateQuality() {
-        Arrays.stream(items)
-                .map(item -> item.setSellInTime())
-                .map(item -> item.updateItem())
-                .forEach(item -> {});
+        Arrays.stream(items).forEach(Item::updateItem);
     }
 }
