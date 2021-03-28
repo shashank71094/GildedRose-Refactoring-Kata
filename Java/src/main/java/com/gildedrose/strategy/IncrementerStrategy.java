@@ -5,13 +5,10 @@ import com.gildedrose.Item;
 public class IncrementerStrategy extends Strategy {
 
     @Override
-    public void updateItem(Item item) {
-        if (isQualityBelowFifty.test(item)) {
-            item.quality++;
-            if(isExpired.and(isQualityBelowFifty).test(item)) {
-                item.quality++;
-            }
+    public void updateQuality(Item item) {
+        incrementQuality.accept(item, 1);
+        if (isExpired.test(item)) {
+            incrementQuality.accept(item, 1);
         }
-        item.sellIn--;
     }
 }

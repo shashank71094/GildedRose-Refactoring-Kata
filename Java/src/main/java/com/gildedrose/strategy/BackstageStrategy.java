@@ -10,19 +10,16 @@ public class BackstageStrategy extends Strategy {
     Predicate<Item> isConcertFiveOrLessDaysAway = item -> item.sellIn <= 5;
 
     @Override
-    public void updateItem(Item item) {
-        if (isQualityBelowFifty.test(item)) {
-            item.quality++;
-            if (isConcertTenOrLessDaysAway.and(isQualityBelowFifty).test(item)) {
-                item.quality++;
-            }
-            if (isConcertFiveOrLessDaysAway.and(isQualityBelowFifty).test(item)) {
-                item.quality++;
-            }
-            if(isExpired.test(item)) {
-                item.quality = 0;
-            }
+    public void updateQuality(Item item) {
+        incrementQuality.accept(item, 1);
+        if (isConcertTenOrLessDaysAway.test(item)) {
+            incrementQuality.accept(item, 1);
         }
-        item.sellIn--;
+        if (isConcertFiveOrLessDaysAway.test(item)) {
+            incrementQuality.accept(item, 1);
+        }
+        if (isExpired.test(item)) {
+            nullifyQuality.accept(item);
+        }
     }
 }

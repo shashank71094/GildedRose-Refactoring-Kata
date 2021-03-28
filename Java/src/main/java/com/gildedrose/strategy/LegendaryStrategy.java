@@ -5,7 +5,7 @@ import com.gildedrose.Item;
 public class LegendaryStrategy extends Strategy {
 
     @Override
-    public void updateItem(Item item) {
-        return;
+    public void updateQuality(Item item) {
+        // do nothing
     }
 }
